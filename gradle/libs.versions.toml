@@ -10,8 +10,11 @@ kotlin = "2.4.0"
 composeBom = "2026.06.01"
 room = "2.8.4"
 ksp = "2.3.9"
+koin-bom = "4.2.2"
 
 [libraries]
+koin-bom = { group = "io.insert-koin", name = "koin-bom", version.ref = "koin-bom" }
+koin-android = { group = "io.insert-koin", name = "koin-android" }
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }

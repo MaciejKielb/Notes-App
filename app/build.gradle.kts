@@ -5,7 +5,7 @@ plugins {
 }
 
 android {
-    namespace = "com.example.myapplication"
+    namespace = "com.notesApplication"
     compileSdk {
         version = release(36) {
             minorApiLevel = 1
@@ -13,7 +13,7 @@ android {
     }
 
     defaultConfig {
-        applicationId = "com.example.myapplication"
+        applicationId = "com.myapplication"
         minSdk = 24
         targetSdk = 36
         versionCode = 1
@@ -41,6 +41,8 @@ android {
 }
 
 dependencies {
+    implementation(platform(libs.koin.bom))
+    implementation(libs.koin.android)
     ksp(libs.androidx.room.compiler)
     implementation(libs.androidx.room.ktx)
     implementation(libs.androidx.room.runtime.ktx)
