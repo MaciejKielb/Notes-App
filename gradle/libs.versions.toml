@@ -11,8 +11,11 @@ composeBom = "2026.06.01"
 room = "2.8.4"
 ksp = "2.3.9"
 koin-bom = "4.2.2"
+room3Runtime = "3.0.0"
 
 [libraries]
+androidx-room3-compiler = { module = "androidx.room3:room3-compiler", version.ref = "room3Runtime" }
+androidx-room3-runtime = { module = "androidx.room3:room3-runtime", version.ref = "room3Runtime" }
 koin-bom = { group = "io.insert-koin", name = "koin-bom", version.ref = "koin-bom" }
 koin-android = { group = "io.insert-koin", name = "koin-android" }
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
