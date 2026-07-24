@@ -45,7 +45,10 @@ jobs:
       - name: Setup Android SDK
         uses: android-actions/setup-android@v3
         with:
-          packages: tools platform-tools platforms;android-37
+          packages: tools platform-tools platforms;android-37.0
+
+      - name: Link API 37 platform path
+        run: ln -sfn "$ANDROID_HOME/platforms/android-37.0" "$ANDROID_HOME/platforms/android-37"
 
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v4
