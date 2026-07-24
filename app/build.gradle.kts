@@ -8,10 +8,7 @@ plugins {
 android {
     namespace = "com.notesapp"
     compileSdk {
-        version =
-            release(36) {
-                minorApiLevel = 1
-            }
+        version = release(37)
     }
 
     defaultConfig {
@@ -47,7 +44,7 @@ dependencies {
     implementation(libs.koin.android)
     ksp(libs.androidx.room.compiler)
     implementation(libs.androidx.room.ktx)
-    implementation(libs.androidx.room.runtime.ktx)
+    implementation(libs.androidx.room.runtime)
     implementation(platform(libs.androidx.compose.bom))
     implementation(libs.androidx.activity.compose)
     implementation(libs.androidx.compose.material3)
