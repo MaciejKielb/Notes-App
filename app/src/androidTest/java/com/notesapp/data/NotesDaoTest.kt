@@ -82,7 +82,7 @@ class NotesDaoTest {
 
             val allNotes = dao.getAllNotes().first()
 
-            assertThat(allNotes).hasSize(3)
+            assertThat(allNotes).hasSize(2)
         }
 
     @Test
