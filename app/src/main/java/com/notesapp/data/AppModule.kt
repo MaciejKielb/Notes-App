@@ -14,5 +14,6 @@ val appModule =
                     "notes_database",
                 ).build()
         }
-        single { get<NotesDatabase>().dao }
+        factory { get<NotesDatabase>().dao }
+        single<NotesRepositoryInterface> { NotesRepository(get()) }
     }
