@@ -1,8 +1,8 @@
 package com.notesapp.data
 
-class NotesRepository (
-    private val notesDao: NotesDao
-): NotesRepositoryInterface {
+class NotesRepository(
+    private val notesDao: NotesDao,
+) : NotesRepositoryInterface {
     override suspend fun upsertNote(note: Notes) {
         notesDao.upsertNote(note)
     }

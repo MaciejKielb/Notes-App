@@ -10,5 +10,5 @@ data class Notes(
     val createdOn: Long,
     val updatedOn: Long,
     @PrimaryKey(autoGenerate = true)
-    val id: Long = 0L
+    val id: Long = 0L,
 )
