@@ -14,12 +14,18 @@ interface NotesDao {
     @Delete
     suspend fun deleteNote(note: Notes)
 
-    @Query("SELECT * FROM notes ORDER BY createdOn DESC")
-    fun getNoteOrderedByDate(): Flow<List<Notes>>
+    @Query("SELECT * FROM notes")
+    fun getAllNotes(): Flow<List<Notes>>
 
-    @Query("SELECT * FROM notes ORDER BY updatedOn DESC")
-    fun getNoteOrderedByUpdatedDate(): Flow<List<Notes>>
+    @Query("SELECT * FROM notes ORDER BY createdOn DESC")
+    fun getNotesOrderedByDateDesc(): Flow<List<Notes>>
+
+    @Query("SELECT * FROM notes ORDER BY updatedOn ASC")
+    fun getNotesOrderedByDateAsc(): Flow<List<Notes>>
+
+    @Query("SELECT * FROM notes ORDER BY title DESC")
+    fun getNoteOrderedByTitleDesc(): Flow<List<Notes>>
 
     @Query("SELECT * FROM notes ORDER BY title ASC")
-    fun getNoteOrderedByTitle(): Flow<List<Notes>>
+    fun getNoteOrderedByTitleAsc(): Flow<List<Notes>>
 }

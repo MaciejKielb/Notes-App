@@ -38,75 +38,77 @@ class NotesDaoTest {
     @Test
     fun testUpsertNote() =
         runTest {
-            val note =
-                Notes(
-                    "shopping list",
-                    "strawberries, potatoes, chicken",
-                    System.currentTimeMillis(),
-                    System.currentTimeMillis(),
-                )
+            val firstNote = createTestNote(id = 1L, title = "first shopping list", text = "chicken, bread, ketchup")
 
-            dao.upsertNote(note)
+            dao.upsertNote(firstNote)
 
-            val allNotes = dao.getNoteOrderedByDate().first()
+            val allNotes = dao.getAllNotes().first()
 
             assertThat(allNotes).hasSize(1)
 
             val savedNote = allNotes[0]
 
-            assertThat(savedNote.title).isEqualTo(note.title)
-            assertThat(savedNote.text).isEqualTo(note.text)
-            assertThat(savedNote.createdOn).isEqualTo(note.createdOn)
+            assertThat(savedNote.title).isEqualTo(firstNote.title)
+            assertThat(savedNote.text).isEqualTo(firstNote.text)
+            assertThat(savedNote.createdOn).isEqualTo(firstNote.createdOn)
         }
 
     @Test
     fun testDeleteNote() =
         runTest {
-            val note =
-                Notes(
-                    "shopping list",
-                    "strawberries, potatoes, chicken",
-                    System.currentTimeMillis(),
-                    System.currentTimeMillis(),
-                )
+            val firstNote = createTestNote(id = 1L, title = "first shopping list")
 
-            dao.upsertNote(note)
+            dao.upsertNote(firstNote)
 
-            val allNotes = dao.getNoteOrderedByDate().first().first()
+            val allNotes = dao.getAllNotes().first().first()
 
             dao.deleteNote(allNotes)
 
-            val allNotesAfterUpdate = dao.getNoteOrderedByDate().first()
+            val allNotesAfterUpdate = dao.getAllNotes().first()
 
             assertThat(allNotesAfterUpdate).isEmpty()
         }
 
     @Test
-    fun testGetNoteOrderedByDate() =
+    fun testGetAllNotes() =
         runTest {
-            val firstNote =
-                Notes(
-                    "first shopping list",
-                    "strawberries, potatoes, chicken",
-                    System.currentTimeMillis(),
-                    System.currentTimeMillis(),
-                    id = 1L,
-                )
+            val firstNote = createTestNote(id = 1L, title = "first shopping list")
+            val secondNote = createTestNote(id = 2L, title = "second shopping list", timeOffset = 3600000L)
+            val thirdNote = createTestNote(id = 3L, title = "third shopping list", timeOffset = 7500000L)
 
-            val secondNote =
-                Notes(
-                    "second shopping list",
-                    "chips, beer, popcorn",
-                    System.currentTimeMillis() - 3600000L,
-                    System.currentTimeMillis() - 3600000L,
-                    id = 2L,
-                )
+            dao.upsertNote(firstNote)
+            dao.upsertNote(secondNote)
+            dao.upsertNote(thirdNote)
+
+            val allNotes = dao.getAllNotes().first()
+
+            assertThat(allNotes).hasSize(3)
+        }
+
+    @Test
+    fun testGetNoteOrderedByDateDesc() =
+        runTest {
+            val firstNote = createTestNote(id = 1L, title = "first shopping list")
+            val secondNote = createTestNote(id = 2L, title = "second shopping list", timeOffset = 3600000L)
 
             dao.upsertNote(firstNote)
             dao.upsertNote(secondNote)
 
-            val allNotes = dao.getNoteOrderedByDate().first()
+            val allNotes = dao.getAllNotes().first()
 
-            assertThat(allNotes).containsExactly(secondNote, firstNote).inOrder()
+            assertThat(allNotes).containsExactly(firstNote, firstNote).inOrder()
         }
+
+    private fun createTestNote(
+        id: Long,
+        title: String = "Default Title",
+        text: String = "Default Text",
+        timeOffset: Long = 0L,
+    ) = Notes(
+        title = title,
+        text = text,
+        createdOn = System.currentTimeMillis() - timeOffset,
+        updatedOn = System.currentTimeMillis() - timeOffset,
+        id = id,
+    )
 }
