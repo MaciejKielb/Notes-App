@@ -82,7 +82,7 @@ class NotesDaoTest {
 
             val allNotes = dao.getAllNotes().first()
 
-            assertThat(allNotes).hasSize(2)
+            assertThat(allNotes).hasSize(3)
         }
 
     @Test
@@ -96,7 +96,7 @@ class NotesDaoTest {
 
             val allNotes = dao.getAllNotes().first()
 
-            assertThat(allNotes).containsExactly(firstNote, firstNote).inOrder()
+            assertThat(allNotes).containsExactly(firstNote, secondNote).inOrder()
         }
 
     private fun createTestNote(
