@@ -11,9 +11,13 @@ class NotesRepository(
         notesDao.deleteNote(note)
     }
 
-    override fun getNoteOrderedByDate() = notesDao.getNoteOrderedByDate()
+    override fun getAllNotes() = notesDao.getAllNotes()
 
-    override fun getNoteOrderedByUpdatedDate() = notesDao.getNoteOrderedByUpdatedDate()
+    override fun getNotesOrderedByDateDesc() = notesDao.getNotesOrderedByDateDesc()
 
-    override fun getNoteOrderedByTitle() = notesDao.getNoteOrderedByTitle()
+    override fun getNotesOrderedByDateAsc() = notesDao.getNotesOrderedByDateAsc()
+
+    override fun getNoteOrderedByTitleDesc() = notesDao.getNoteOrderedByTitleDesc()
+
+    override fun getNoteOrderedByTitleAsc() = notesDao.getNoteOrderedByTitleAsc()
 }
