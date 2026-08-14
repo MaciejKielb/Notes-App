@@ -71,4 +71,5 @@ dependencies {
     testImplementation(libs.truth)
     androidTestImplementation(libs.truth)
     implementation(libs.androidx.core.splashscreen)
+    implementation(libs.androidx.datastore.preferences)
 }
