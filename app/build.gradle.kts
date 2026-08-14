@@ -70,4 +70,5 @@ dependencies {
     testImplementation(libs.mockk)
     testImplementation(libs.truth)
     androidTestImplementation(libs.truth)
+    implementation(libs.androidx.core.splashscreen)
 }
