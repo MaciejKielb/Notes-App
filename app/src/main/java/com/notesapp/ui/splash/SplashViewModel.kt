@@ -8,8 +8,8 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 
 class SplashViewModel(
-    private val userPreferences: UserPreferences
-): ViewModel(){
+    private val userPreferences: UserPreferences,
+) : ViewModel() {
     private val _isLoading = MutableStateFlow(true)
     private val _isFirstTime = MutableStateFlow<Boolean?>(null)
 
@@ -23,6 +23,12 @@ class SplashViewModel(
                 _isFirstTime.value = firstRun
                 _isLoading.value = false
             }
+        }
+    }
+
+    fun completeOnboarding() {
+        viewModelScope.launch {
+            userPreferences.setOnboardingCompleted()
         }
     }
 }

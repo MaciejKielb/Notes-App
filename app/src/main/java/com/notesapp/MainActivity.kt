@@ -5,13 +5,13 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
+import com.notesapp.ui.mainscreen.MainScreen
 import com.notesapp.ui.splash.SplashViewModel
 import com.notesapp.ui.theme.NotesAppTheme
 import org.koin.androidx.viewmodel.ext.android.viewModel
-import com.notesapp.ui.mainscreen.MainScreen
 
 class MainActivity : ComponentActivity() {
-    val viewModel: SplashViewModel by viewModel()
+    private val viewModel: SplashViewModel by viewModel()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         val splashScreen = installSplashScreen()
