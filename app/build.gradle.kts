@@ -47,6 +47,7 @@ android {
 
 dependencies {
     implementation(platform(libs.koin.bom))
+    implementation(libs.androidx.navigation.compose)
     implementation(libs.koin.android)
     ksp(libs.androidx.room.compiler)
     implementation(libs.androidx.room.ktx)

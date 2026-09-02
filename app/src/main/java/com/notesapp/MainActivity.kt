@@ -5,7 +5,8 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
-import com.notesapp.ui.mainscreen.MainScreen
+import androidx.navigation.compose.rememberNavController
+import com.notesapp.ui.navigation.SetupNavGraph
 import com.notesapp.ui.splash.SplashViewModel
 import com.notesapp.ui.theme.NotesAppTheme
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -24,7 +25,11 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             NotesAppTheme {
-                MainScreen(viewModel)
+                val navController = rememberNavController()
+                SetupNavGraph(
+                    navController = navController,
+                    viewModel = viewModel
+                )
             }
         }
     }

@@ -12,11 +12,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.navigation.NavHostController
+import com.notesapp.ui.navigation.Screens
 import com.notesapp.ui.splash.SplashViewModel
 
 @Composable
 @Suppress("ktlint:standard:function-naming")
-fun GettingStartedScreen(viewModel: SplashViewModel) {
+fun GettingStartedScreen(viewModel: SplashViewModel, navController: NavHostController) {
     Box(modifier = Modifier.fillMaxSize()) {
         Box(
             modifier =
@@ -34,7 +36,12 @@ fun GettingStartedScreen(viewModel: SplashViewModel) {
             )
         }
         Button(
-            onClick = { viewModel.completeOnboarding() },
+            onClick = {
+                viewModel.completeOnboarding()
+                navController.navigate(Screens.MainScreen.route) {
+                    popUpTo(Screens.GettingStartedScreen.route) { inclusive = true }
+                }
+            },
             modifier = Modifier.align(Alignment.Center),
         ) {
             Text("I finished onboarding")
