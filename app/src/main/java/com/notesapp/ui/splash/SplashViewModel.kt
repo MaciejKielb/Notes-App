@@ -13,16 +13,14 @@ class SplashViewModel(
     private val userPreferences: UserPreferences,
 ) : ViewModel() {
     private val _isLoading = MutableStateFlow(true)
-    private val _isFirstTime = MutableStateFlow<Boolean?>(null)
+    private val isFirstTime = MutableStateFlow<Boolean?>(null)
 
     val isLoading: StateFlow<Boolean> = _isLoading
-
-    private val isFirstTime: StateFlow<Boolean?> = _isFirstTime
 
     init {
         viewModelScope.launch {
             userPreferences.isFirstTime().collect { firstRun ->
-                _isFirstTime.value = firstRun
+                isFirstTime.value = firstRun
                 _isLoading.value = false
             }
         }

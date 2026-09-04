@@ -18,7 +18,10 @@ import com.notesapp.ui.splash.SplashViewModel
 
 @Composable
 @Suppress("ktlint:standard:function-naming")
-fun GettingStartedScreen(viewModel: SplashViewModel, navController: NavHostController) {
+fun GettingStartedScreen(
+    viewModel: SplashViewModel,
+    navController: NavHostController,
+) {
     Box(modifier = Modifier.fillMaxSize()) {
         Box(
             modifier =
