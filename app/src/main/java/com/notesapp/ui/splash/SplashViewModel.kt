@@ -3,7 +3,6 @@ package com.notesapp.ui.splash
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.notesapp.data.UserPreferences
-import com.notesapp.ui.navigation.Screens
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
@@ -25,10 +24,5 @@ class SplashViewModel(
         }
     }
 
-    fun startDestination(): String =
-        if (isFirstTime.value == true) {
-            Screens.GettingStartedScreen.route
-        } else {
-            Screens.MainScreen.route
-        }
+    fun isFirstLaunch(): Boolean = isFirstTime.value == true
 }
