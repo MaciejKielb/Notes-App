@@ -31,18 +31,14 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
 
         lifecycleScope.launch {
-            viewModel.isLoading.filter { isLoading -> !isLoading }.first()
+            val isFirstTime = viewModel.awaitIsFirstLaunch()
 
-            intent.putExtra(
-                IntentParameters.IS_FIRST_TIME,
-                viewModel.isFirstLaunch(),
-            )
+            intent.putExtra(IntentParameters.IS_FIRST_TIME, isFirstTime)
 
-            val startDestination: Screens =
-                when (intent.getBooleanExtra(IntentParameters.IS_FIRST_TIME, false)) {
-                    true -> Screens.GettingStartedScreen
-                    else -> Screens.MainScreen
-                }
+            val startDestination = when (isFirstTime) {
+                true -> Screens.GettingStartedScreen
+                else -> Screens.MainScreen
+            }
 
             setContent {
                 NotesAppTheme {
@@ -53,6 +49,7 @@ class MainActivity : ComponentActivity() {
                     )
                 }
             }
+            viewModel.finishSplash()
         }
     }
 }
