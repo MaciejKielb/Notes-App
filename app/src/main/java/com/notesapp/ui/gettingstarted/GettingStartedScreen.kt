@@ -5,12 +5,13 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.pager.HorizontalPager
-import androidx.compose.foundation.pager.PageSize
 import androidx.compose.foundation.pager.PagerState
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material3.Button
@@ -34,7 +35,7 @@ import com.notesapp.ui.util.OnBoardingPage
 @Suppress("ktlint:standard:function-naming")
 fun GettingStartedScreen(
     navController: NavHostController,
-    viewModel: GettingStartedViewModel
+    viewModel: GettingStartedViewModel,
 ) {
     GettingStartedContent(
         onFinishClick = {
@@ -42,33 +43,32 @@ fun GettingStartedScreen(
             navController.navigate(Screens.MainScreen.route) {
                 popUpTo(Screens.GettingStartedScreen.route) { inclusive = true }
             }
-        }
+        },
     )
 }
 
 @Composable
-fun GettingStartedContent(
-    onFinishClick: () -> Unit
-) {
-    val pages = listOf(
-        OnBoardingPage.First,
-        OnBoardingPage.Second,
-        OnBoardingPage.Third,
-    )
+fun GettingStartedContent(onFinishClick: () -> Unit) {
+    val pages =
+        listOf(
+            OnBoardingPage.First,
+            OnBoardingPage.Second,
+            OnBoardingPage.Third,
+        )
     val pagerState = rememberPagerState(pageCount = { pages.size })
 
     Column(modifier = Modifier.fillMaxSize()) {
         HorizontalPager(
             modifier = Modifier.weight(10f),
             state = pagerState,
-            verticalAlignment = Alignment.Top
+            verticalAlignment = Alignment.Top,
         ) { position ->
             PagerScreen(onBoardingPage = pages[position])
         }
         FinishButton(
             modifier = Modifier.weight(0.5f),
             pagerState = pagerState,
-            onClick = onFinishClick
+            onClick = onFinishClick,
         )
     }
 }
@@ -76,23 +76,30 @@ fun GettingStartedContent(
 @Composable
 fun PagerScreen(onBoardingPage: OnBoardingPage) {
     Column(
-        modifier = Modifier
-            .fillMaxSize(),
+        modifier =
+            Modifier
+                .fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Top
+        verticalArrangement = Arrangement.Top,
     ) {
         Image(
-            modifier = Modifier
-                .fillMaxWidth(0.5f)
-                .fillMaxHeight(0.7f),
+            modifier =
+                Modifier
+                    .fillMaxWidth(0.5f)
+                    .fillMaxHeight(0.7f),
             painter = painterResource(onBoardingPage.image),
-            contentDescription = "Pager Image"
+            contentDescription = "Pager Image",
         )
         Text(
             text = onBoardingPage.title,
             style = MaterialTheme.typography.headlineMedium,
             fontWeight = FontWeight.Bold,
             textAlign = TextAlign.Center,
+        )
+        Spacer(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(10.dp)
         )
         Text(
             text = onBoardingPage.description,
@@ -106,23 +113,25 @@ fun PagerScreen(onBoardingPage: OnBoardingPage) {
 fun FinishButton(
     modifier: Modifier,
     pagerState: PagerState,
-    onClick: () -> Unit
+    onClick: () -> Unit,
 ) {
     Row(
-        modifier = modifier
-            .padding(horizontal = 40.dp),
+        modifier =
+            modifier
+                .padding(horizontal = 40.dp),
         verticalAlignment = Alignment.Top,
-        horizontalArrangement = Arrangement.Center
+        horizontalArrangement = Arrangement.Center,
     ) {
         AnimatedVisibility(
             modifier = Modifier.fillMaxWidth(),
-            visible = pagerState.currentPage == 2
+            visible = pagerState.currentPage == pagerState.pageCount - 1
         ) {
             Button(
                 onClick = onClick,
-                colors = ButtonDefaults.buttonColors(
-                    contentColor = Color.White
-                )
+                colors =
+                    ButtonDefaults.buttonColors(
+                        contentColor = Color.White,
+                    ),
             ) {
                 Text(text = "Finish")
             }
