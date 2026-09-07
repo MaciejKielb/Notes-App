@@ -32,7 +32,6 @@ import com.notesapp.ui.navigation.Screens
 import com.notesapp.ui.util.OnBoardingPage
 
 @Composable
-@Suppress("ktlint:standard:function-naming")
 fun GettingStartedScreen(
     navController: NavHostController,
     viewModel: GettingStartedViewModel,
@@ -48,14 +47,21 @@ fun GettingStartedScreen(
 }
 
 @Composable
-fun GettingStartedContent(onFinishClick: () -> Unit) {
+fun GettingStartedContent(
+    onFinishClick: () -> Unit,
+    initialPage: Int = 0,
+) {
     val pages =
         listOf(
             OnBoardingPage.First,
             OnBoardingPage.Second,
             OnBoardingPage.Third,
         )
-    val pagerState = rememberPagerState(pageCount = { pages.size })
+    val pagerState =
+        rememberPagerState(
+            initialPage = initialPage,
+            pageCount = { pages.size },
+        )
 
     Column(modifier = Modifier.fillMaxSize()) {
         HorizontalPager(
@@ -66,7 +72,7 @@ fun GettingStartedContent(onFinishClick: () -> Unit) {
             PagerScreen(onBoardingPage = pages[position])
         }
         FinishButton(
-            modifier = Modifier.weight(0.5f),
+            modifier = Modifier.weight(2f),
             pagerState = pagerState,
             onClick = onFinishClick,
         )
@@ -118,9 +124,7 @@ fun FinishButton(
     Row(
         modifier =
             modifier
-                .padding(horizontal = 40.dp),
-        verticalAlignment = Alignment.Top,
-        horizontalArrangement = Arrangement.Center,
+                .padding(horizontal = 60.dp),
     ) {
         AnimatedVisibility(
             modifier = Modifier.fillMaxWidth(),
@@ -139,26 +143,33 @@ fun FinishButton(
     }
 }
 
+@Preview(name = "Onboarding first page", showBackground = true, widthDp = 390, heightDp = 844)
 @Composable
-@Preview(showBackground = true)
 fun FirstOnBoardingScreenPreview() {
-    Column(modifier = Modifier.fillMaxSize()) {
-        PagerScreen(onBoardingPage = OnBoardingPage.First)
-    }
+    GettingStartedContent(
+        onFinishClick = {},
+        initialPage = 0,
+    )
 }
 
+@Preview(name = "Onboarding second page", showBackground = true, widthDp = 390, heightDp = 844)
 @Composable
-@Preview(showBackground = true)
 fun SecondOnBoardingScreenPreview() {
     Column(modifier = Modifier.fillMaxSize()) {
-        PagerScreen(onBoardingPage = OnBoardingPage.Second)
+        GettingStartedContent(
+            onFinishClick = {},
+            initialPage = 1,
+        )
     }
 }
 
+@Preview(name = "Onboarding third page", showBackground = true, widthDp = 390, heightDp = 844)
 @Composable
-@Preview(showBackground = true)
 fun ThirdOnBoardingScreenPreview() {
     Column(modifier = Modifier.fillMaxSize()) {
-        PagerScreen(onBoardingPage = OnBoardingPage.Third)
+        GettingStartedContent(
+            onFinishClick = {},
+            initialPage = 2,
+        )
     }
 }
