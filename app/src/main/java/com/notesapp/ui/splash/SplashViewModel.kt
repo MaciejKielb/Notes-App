@@ -27,18 +27,10 @@ class SplashViewModel(
     }
 
     fun startDestination(): String {
-        Log.e("SplashViewModel", "isLoading: ${isLoading.value}")
-        Log.e("SplashViewModel", "isFirstTime: ${isFirstTime.value}")
         return if (isFirstTime.value == true) {
             Screens.GettingStartedScreen.route
         } else {
             Screens.MainScreen.route
-        }
-    }
-
-    fun completeOnboarding() {
-        viewModelScope.launch {
-            userPreferences.setOnboardingCompleted()
         }
     }
 }
