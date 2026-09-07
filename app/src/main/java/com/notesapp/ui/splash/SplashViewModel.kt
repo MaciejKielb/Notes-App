@@ -1,6 +1,5 @@
 package com.notesapp.ui.splash
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.notesapp.data.UserPreferences
@@ -26,19 +25,10 @@ class SplashViewModel(
         }
     }
 
-    fun startDestination(): String {
-        Log.e("SplashViewModel", "isLoading: ${isLoading.value}")
-        Log.e("SplashViewModel", "isFirstTime: ${isFirstTime.value}")
-        return if (isFirstTime.value == true) {
+    fun startDestination(): String =
+        if (isFirstTime.value == true) {
             Screens.GettingStartedScreen.route
         } else {
             Screens.MainScreen.route
         }
-    }
-
-    fun completeOnboarding() {
-        viewModelScope.launch {
-            userPreferences.setOnboardingCompleted()
-        }
-    }
 }

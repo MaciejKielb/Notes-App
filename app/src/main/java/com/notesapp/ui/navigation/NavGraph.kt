@@ -8,6 +8,7 @@ import androidx.navigation.compose.composable
 import com.notesapp.ui.gettingstarted.GettingStartedScreen
 import com.notesapp.ui.mainscreen.MainScreen
 import com.notesapp.ui.splash.SplashViewModel
+import org.koin.compose.viewmodel.koinViewModel
 
 @Suppress("ktlint:standard:function-naming")
 @Composable
@@ -27,7 +28,10 @@ fun SetupNavGraph(
             MainScreen()
         }
         composable(Screens.GettingStartedScreen.route) {
-            GettingStartedScreen(viewModel = viewModel, navController = navController)
+            GettingStartedScreen(
+                viewModel = koinViewModel(),
+                navController = navController,
+            )
         }
     }
 }
