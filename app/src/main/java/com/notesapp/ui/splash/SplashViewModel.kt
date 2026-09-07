@@ -1,34 +1,21 @@
 package com.notesapp.ui.splash
 
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
 import com.notesapp.data.UserPreferences
-import com.notesapp.ui.navigation.Screens
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.flow.first
 
 class SplashViewModel(
     private val userPreferences: UserPreferences,
 ) : ViewModel() {
     private val _isLoading = MutableStateFlow(true)
-    private val isFirstTime = MutableStateFlow<Boolean?>(null)
 
     val isLoading: StateFlow<Boolean> = _isLoading
 
-    init {
-        viewModelScope.launch {
-            userPreferences.isFirstTime().collect { firstRun ->
-                isFirstTime.value = firstRun
-                _isLoading.value = false
-            }
-        }
-    }
+    suspend fun awaitIsFirstLaunch(): Boolean = userPreferences.isFirstTime().first()
 
-    fun startDestination(): String =
-        if (isFirstTime.value == true) {
-            Screens.GettingStartedScreen.route
-        } else {
-            Screens.MainScreen.route
-        }
+    fun finishSplash() {
+        _isLoading.value = false
+    }
 }
