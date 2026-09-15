@@ -1,4 +1,4 @@
-package com.notesapp.TopBar
+package com.notesapp.ui.topbar
 
 import androidx.compose.ui.graphics.vector.ImageVector
 

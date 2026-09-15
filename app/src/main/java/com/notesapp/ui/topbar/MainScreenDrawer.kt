@@ -1,15 +1,17 @@
-package com.notesapp.TopBar
+package com.notesapp.ui.topbar
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AddCircle
+import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Info
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
@@ -22,14 +24,54 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
 @Composable
-fun DrawerHeader() {
+fun MainScreenDrawer(
+    onItemClick: (MenuItem) -> Unit,
+    onCloseClick: () -> Unit
+) {
+    DrawerHeader(onItemClick = onCloseClick)
+    DrawerBody(
+        onItemClick = onItemClick,
+        items = listOf(
+            MenuItem(
+                id = "QR Scanner",
+                title = "QR Scanner",
+                contentDescription = "Open QR Scanner",
+                icon = Icons.Default.AddCircle,
+            ),
+            MenuItem(
+                id = "App Version",
+                title = "App Version",
+                contentDescription = "App Version",
+                icon = Icons.Default.Info,
+            ),
+        )
+    )
+}
+@Composable
+fun DrawerHeader(
+    onItemClick: () -> Unit
+) {
     Box(
         modifier = Modifier
-            .fillMaxSize()
-            .padding(16.dp),
-        contentAlignment = Alignment.Center
+            .fillMaxWidth()
+            .padding(24.dp),
+        contentAlignment = Alignment.TopStart
     ) {
-        Text(text = "Header", fontSize = 60.sp)
+        Row(verticalAlignment = Alignment.CenterVertically)
+        {
+            Text(
+                text = "Menu",
+                fontSize = 24.sp,
+            )
+            Spacer(modifier = Modifier.weight(1f))
+            Icon(
+                imageVector = Icons.Default.Close,
+                contentDescription = "close drawer icon button",
+                modifier = Modifier
+                    .padding(start = 16.dp)
+                    .clickable { onItemClick() },
+            )
+        }
     }
 }
 
@@ -42,14 +84,14 @@ fun DrawerBody(
 ) {
     Box(
         modifier = Modifier
-            .fillMaxSize()
+            .fillMaxWidth()
             .padding(16.dp),
-        contentAlignment = Alignment.Center
+        contentAlignment = Alignment.TopStart
     ) {
         LazyColumn(modifier) {
             items(items) { item ->
                 Row(modifier = Modifier
-                .fillMaxSize()
+                .fillMaxWidth()
                 .clickable { onItemClick(item) }
                 .padding(16.dp),
                 ) {
@@ -72,7 +114,7 @@ fun DrawerBody(
 @Preview(name = "Drawer Header", showBackground = true, widthDp = 390, heightDp = 844)
 @Composable
 fun DrawerHeaderPreview() {
-    DrawerHeader()
+    DrawerHeader(onItemClick = {})
 }
 
 @Preview(name = "DrawerBody", showBackground = true, widthDp = 390, heightDp = 844)
@@ -84,13 +126,13 @@ fun DrawerBodyPreview() {
                 id = "QR Scanner",
                 title = "QR Scanner",
                 contentDescription = "Open QR Scanner",
-                icon = androidx.compose.material.icons.Icons.Default.AddCircle,
+                icon = Icons.Default.AddCircle,
             ),
             MenuItem(
                 id = "App Version",
                 title = "App Version",
                 contentDescription = "App Version",
-                icon = androidx.compose.material.icons.Icons.Default.Info,
+                icon = Icons.Default.Info,
             ),
         ),
         onItemClick = {}

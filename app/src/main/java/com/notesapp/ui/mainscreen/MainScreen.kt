@@ -3,9 +3,6 @@ package com.notesapp.ui.mainscreen
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.AddCircle
-import androidx.compose.material.icons.filled.Info
 import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalDrawerSheet
@@ -17,14 +14,17 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
-import com.notesapp.TopBar.DrawerBody
-import com.notesapp.TopBar.DrawerHeader
-import com.notesapp.TopBar.MenuItem
-import com.notesapp.TopBar.TopAppBar
 import kotlinx.coroutines.launch
+import com.notesapp.ui.topbar.TopAppBar
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.systemBars
+import androidx.compose.foundation.layout.windowInsetsPadding
+import androidx.compose.ui.graphics.RectangleShape
+import com.notesapp.ui.topbar.MainScreenDrawer
 
 @Composable
 fun MainScreen() {
@@ -34,28 +34,17 @@ fun MainScreen() {
     ModalNavigationDrawer(
         drawerState = drawerState,
         drawerContent = {
-            ModalDrawerSheet {
-                DrawerHeader()
-                DrawerBody(
-                    items = listOf(
-                        MenuItem(
-                            id = "QR Scanner",
-                            title = "QR Scanner",
-                            contentDescription = "Open QR Scanner",
-                            icon = Icons.Default.AddCircle,
-                        ),
-                        MenuItem(
-                            id = "App Version",
-                            title = "App Version",
-                            contentDescription = "App Version",
-                            icon = Icons.Default.Info,
-                        ),
-                    ),
-                    onItemClick = {
-                        when (it.id) {
-                            "QR Scanner" -> println("Clicked on QR Scanner")
-                            "App Version" -> println("Clicked on App Version")
-                        }
+            ModalDrawerSheet(
+                modifier = Modifier
+                    .fillMaxWidth(0.8f)
+                    .windowInsetsPadding(WindowInsets.systemBars)
+                    .background(color = MaterialTheme.colorScheme.background),
+                    drawerShape = RectangleShape
+            ) {
+                MainScreenDrawer(
+                    onCloseClick = { scope.launch { drawerState.close() } },
+                    onItemClick = { item ->
+                        scope.launch { drawerState.close() }
                     },
                 )
             }
@@ -79,7 +68,6 @@ fun MainScreen() {
                 Text(
                     text = "Notes",
                     style = MaterialTheme.typography.headlineMedium,
-                    fontWeight = FontWeight.Bold,
                     textAlign = TextAlign.Center,
                 )
             }
