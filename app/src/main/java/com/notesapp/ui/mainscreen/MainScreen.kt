@@ -1,5 +1,6 @@
 package com.notesapp.ui.mainscreen
 
+import androidx.compose.ui.graphics.Color
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -18,12 +19,13 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import kotlinx.coroutines.launch
 import com.notesapp.ui.topbar.TopAppBar
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.systemBars
+import androidx.compose.foundation.layout.statusBars
 import androidx.compose.foundation.layout.windowInsetsPadding
+import androidx.compose.material3.DrawerDefaults
 import androidx.compose.ui.graphics.RectangleShape
+import androidx.compose.ui.unit.dp
 import com.notesapp.ui.topbar.MainScreenDrawer
 
 @Composable
@@ -33,18 +35,18 @@ fun MainScreen() {
 
     ModalNavigationDrawer(
         drawerState = drawerState,
+        modifier = Modifier.windowInsetsPadding(WindowInsets.statusBars),
         drawerContent = {
             ModalDrawerSheet(
                 modifier = Modifier
-                    .fillMaxWidth(0.8f)
-                    .windowInsetsPadding(WindowInsets.systemBars)
-                    .background(color = MaterialTheme.colorScheme.background),
-                    drawerShape = RectangleShape
+                    .fillMaxWidth(0.8f),
+                drawerShape = RectangleShape,
+                drawerContainerColor = Color.White,
+                drawerTonalElevation = 0.dp,
             ) {
                 MainScreenDrawer(
                     onCloseClick = { scope.launch { drawerState.close() } },
-                    onItemClick = { item ->
-                        scope.launch { drawerState.close() }
+                    onItemClick = { scope.launch { drawerState.close() }
                     },
                 )
             }
@@ -53,9 +55,12 @@ fun MainScreen() {
         Scaffold(
             topBar = {
                 TopAppBar(
-                    onNavigationIconClick = {
+                    onMenuClick = {
                         scope.launch { drawerState.open() }
                     },
+                    onAddNoteClick = {
+                        // Handle add note click
+                    }
                 )
             },
         ) { innerPadding ->

@@ -1,7 +1,10 @@
 package com.notesapp.ui.topbar
 
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
@@ -23,30 +26,51 @@ import com.notesapp.ui.theme.NotesAppTheme
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TopAppBar(
-    onNavigationIconClick: () -> Unit,
+    onMenuClick: () -> Unit,
+    onAddNoteClick: () -> Unit,
 ) {
-    Column(){
-        M3TopAppBar(
-            title = {
-                Text(
-                    text = stringResource(id = R.string.app_name)
-                )
-            },
-            navigationIcon = {
-                IconButton(
-                    onClick = onNavigationIconClick,
-                    colors = IconButtonDefaults.iconButtonColors(
-                        containerColor = Color.Transparent,
-                        contentColor = Color.Black,
-                    ),
-                ) {
-                    Icon(
-                        imageVector = Icons.Default.Menu,
-                        contentDescription = "Toggle drawer",
+    Column{
+        Row() {
+            M3TopAppBar(
+                title = {
+                    Text(
+                        text = stringResource(id = R.string.app_name)
                     )
-                }
-            },
-        )
+                },
+                navigationIcon = {
+                    IconButton(
+                        modifier = Modifier.padding(horizontal = 8.dp),
+                        onClick = onMenuClick,
+                        colors = IconButtonDefaults.iconButtonColors(
+                            containerColor = Color.White,
+                            contentColor = Color.Black,
+                        ),
+                    ) {
+
+                        Icon(
+                            imageVector = Icons.Default.Menu,
+                            contentDescription = "Toggle drawer",
+                        )
+                    }
+                },
+                actions = {
+                    IconButton(
+                        modifier = Modifier.padding(end = 8.dp),
+                        onClick = onAddNoteClick,
+                        colors = IconButtonDefaults.iconButtonColors(
+                            containerColor = Color.White,
+                            contentColor = Color.Black
+                        ),
+
+                        ) {
+                        Icon(
+                            imageVector = Icons.Default.Add,
+                            contentDescription = "Toggle drawer",
+                        )
+                    }
+                },
+            )
+        }
         HorizontalDivider(
             modifier = Modifier.shadow(elevation = 2.dp),
             thickness = 1.dp,
@@ -59,6 +83,9 @@ fun TopAppBar(
 @Composable
 fun TopAppBarPreview() {
     NotesAppTheme {
-        TopAppBar(onNavigationIconClick = {})
+        TopAppBar(
+            onMenuClick = {},
+            onAddNoteClick = {},
+        )
     }
 }

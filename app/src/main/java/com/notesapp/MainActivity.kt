@@ -26,12 +26,12 @@ class MainActivity : ComponentActivity() {
 
         enableEdgeToEdge(
             statusBarStyle = SystemBarStyle.light(
-                Color.TRANSPARENT,
-                Color.TRANSPARENT,
+                Color.WHITE,
+                Color.WHITE,
             ),
             navigationBarStyle = SystemBarStyle.light(
-                Color.TRANSPARENT,
-                Color.TRANSPARENT,
+                Color.LTGRAY,
+                Color.LTGRAY,
             ),
         )
         setContent {

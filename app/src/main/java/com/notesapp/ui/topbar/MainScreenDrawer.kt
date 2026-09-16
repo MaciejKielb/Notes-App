@@ -2,6 +2,7 @@ package com.notesapp.ui.topbar
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -79,32 +80,43 @@ fun DrawerHeader(
 fun DrawerBody(
     items: List<MenuItem>,
     modifier: Modifier = Modifier,
-    itemTextStyle: TextStyle = TextStyle(fontSize = 18.sp),
+    itemTextStyle: TextStyle = TextStyle(fontSize = 16.sp),
     onItemClick: (MenuItem) -> Unit,
 ) {
     Box(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(16.dp),
+            .padding(8.dp),
         contentAlignment = Alignment.TopStart
     ) {
-        LazyColumn(modifier) {
-            items(items) { item ->
-                Row(modifier = Modifier
-                .fillMaxWidth()
-                .clickable { onItemClick(item) }
-                .padding(16.dp),
-                ) {
-                    Icon(
-                        imageVector = item.icon,
-                        contentDescription = item.contentDescription
-                    )
-                    Spacer(modifier = Modifier.width(16.dp))
-                    Text(
-                        text = item.title,
-                        style = itemTextStyle,
-                        modifier = Modifier.weight(1f)
-                    )
+        Column() {
+            Row(
+            ) {
+                Text(
+                    text = "Content",
+                    fontSize = 18.sp,
+                    modifier = Modifier.padding(16.dp)
+                )
+            }
+            LazyColumn(modifier,) {
+                items(items) { item ->
+                    Row(modifier = Modifier
+                        .fillMaxWidth()
+                        .clickable { onItemClick(item) }
+                        .padding(8.dp),
+                        verticalAlignment = Alignment.CenterVertically,
+                    ) {
+                        Icon(
+                            imageVector = item.icon,
+                            contentDescription = item.contentDescription
+                        )
+                        Spacer(modifier = Modifier.width(16.dp))
+                        Text(
+                            text = item.title,
+                            style = itemTextStyle,
+                            modifier = Modifier.weight(1f)
+                        )
+                    }
                 }
             }
         }
