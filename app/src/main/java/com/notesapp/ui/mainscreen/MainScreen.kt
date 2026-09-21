@@ -1,7 +1,10 @@
 package com.notesapp.ui.mainscreen
 
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.ui.graphics.Color
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.DrawerValue
@@ -23,9 +26,12 @@ import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.statusBars
 import androidx.compose.foundation.layout.windowInsetsPadding
-import androidx.compose.material3.DrawerDefaults
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
+import androidx.compose.material3.Card
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.unit.dp
+import com.notesapp.data.Notes
 import com.notesapp.ui.topbar.MainScreenDrawer
 
 @Composable
@@ -45,8 +51,13 @@ fun MainScreen() {
                 drawerTonalElevation = 0.dp,
             ) {
                 MainScreenDrawer(
-                    onCloseClick = { scope.launch { drawerState.close() } },
-                    onItemClick = { scope.launch { drawerState.close() }
+                    onCloseClick = {
+                        scope.launch { drawerState.close()
+                        }
+                    },
+                    onItemClick = {
+                        scope.launch { drawerState.close()
+                        }
                     },
                 )
             }
@@ -70,12 +81,54 @@ fun MainScreen() {
                     .padding(innerPadding),
                 contentAlignment = Alignment.Center,
             ) {
-                Text(
-                    text = "Notes",
-                    style = MaterialTheme.typography.headlineMedium,
-                    textAlign = TextAlign.Center,
-                )
+                NotesPlaceholder()
             }
+        }
+    }
+}
+
+@Composable
+fun NotesPlaceholder(notesList: List<Notes> = emptyList()) {
+    Column (
+        modifier = Modifier.fillMaxSize(),
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally,
+        ) {
+        if (notesList.isNotEmpty()) {
+            LazyColumn() {
+                items(notesList) { item ->
+                    ListRow(note = item)
+                }
+            }
+        } else {
+            Text(
+                text = "You don't have any notes yet.",
+                style = MaterialTheme.typography.headlineMedium,
+                textAlign = TextAlign.Center,
+            )
+        }
+    }
+}
+
+@Composable
+fun ListRow(note: Notes) {
+    Card() {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(16.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Text(
+                text = note.title,
+                style = MaterialTheme.typography.bodyLarge,
+                modifier = Modifier.weight(1f)
+            )
+            Text(
+                text = note.text,
+                style = MaterialTheme.typography.bodyMedium,
+                modifier = Modifier.weight(1f)
+            )
         }
     }
 }
