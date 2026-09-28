@@ -1,8 +1,6 @@
 package com.notesapp.ui.mainscreen
 
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.ui.graphics.Color
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
@@ -32,6 +30,7 @@ import androidx.compose.material3.Card
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.unit.dp
 import com.notesapp.data.Notes
+import com.notesapp.ui.theme.NotesAppTheme
 import com.notesapp.ui.topbar.MainScreenDrawer
 
 @Composable
@@ -47,7 +46,7 @@ fun MainScreen() {
                 modifier = Modifier
                     .fillMaxWidth(0.8f),
                 drawerShape = RectangleShape,
-                drawerContainerColor = Color.White,
+                drawerContainerColor = MaterialTheme.colorScheme.surface,
                 drawerTonalElevation = 0.dp,
             ) {
                 MainScreenDrawer(
@@ -64,6 +63,7 @@ fun MainScreen() {
         },
     ) {
         Scaffold(
+            containerColor = MaterialTheme.colorScheme.surface,
             topBar = {
                 TopAppBar(
                     onMenuClick = {
@@ -75,22 +75,18 @@ fun MainScreen() {
                 )
             },
         ) { innerPadding ->
-            Box(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(innerPadding),
-                contentAlignment = Alignment.Center,
-            ) {
-                NotesPlaceholder()
+                NotesPlaceholder(modifier = Modifier.padding(innerPadding))
             }
         }
     }
-}
 
 @Composable
-fun NotesPlaceholder(notesList: List<Notes> = emptyList()) {
+fun NotesPlaceholder(
+    notesList: List<Notes> = emptyList(),
+    modifier: Modifier
+) {
     Column (
-        modifier = Modifier.fillMaxSize(),
+        modifier = modifier.fillMaxSize(),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally,
         ) {
@@ -136,5 +132,7 @@ fun ListRow(note: Notes) {
 @Preview(name = "Main Screen", showBackground = true, widthDp = 390, heightDp = 844)
 @Composable
 fun PreviewMainScreen() {
-    MainScreen()
+    NotesAppTheme {
+        MainScreen()
+    }
 }
