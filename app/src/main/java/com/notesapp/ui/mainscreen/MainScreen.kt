@@ -29,12 +29,14 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Card
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
 import com.notesapp.data.Notes
 import com.notesapp.ui.theme.NotesAppTheme
 import com.notesapp.ui.topbar.MainScreenDrawer
 
 @Composable
-fun MainScreen() {
+fun MainScreen(navController: NavHostController) {
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
     val scope = rememberCoroutineScope()
 
@@ -70,7 +72,7 @@ fun MainScreen() {
                         scope.launch { drawerState.open() }
                     },
                     onAddNoteClick = {
-                        // Handle add note click
+                        navController.navigate("note_input_screen")
                     }
                 )
             },
@@ -133,6 +135,6 @@ fun ListRow(note: Notes) {
 @Composable
 fun PreviewMainScreen() {
     NotesAppTheme {
-        MainScreen()
+        MainScreen(navController = rememberNavController())
     }
 }
