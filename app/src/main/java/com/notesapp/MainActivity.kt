@@ -12,8 +12,6 @@ import com.notesapp.ui.navigation.SetupNavGraph
 import com.notesapp.ui.splash.SplashViewModel
 import com.notesapp.ui.theme.NotesAppTheme
 import com.notesapp.ui.util.IntentParameters
-import kotlinx.coroutines.flow.filter
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
