@@ -7,7 +7,6 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.notesapp.ui.gettingstarted.GettingStartedScreen
 import com.notesapp.ui.mainscreen.MainScreen
-import com.notesapp.ui.notes.NoteInputScreen
 import com.notesapp.ui.splash.SplashViewModel
 import org.koin.compose.viewmodel.koinViewModel
 
@@ -26,24 +25,12 @@ fun SetupNavGraph(
         startDestination = viewModel.startDestination(),
     ) {
         composable(Screens.MainScreen.route) {
-            MainScreen(
-                navController = navController
-            )
+            MainScreen()
         }
         composable(Screens.GettingStartedScreen.route) {
             GettingStartedScreen(
                 viewModel = koinViewModel(),
                 navController = navController,
-            )
-        }
-        composable(Screens.NoteInputScreen.route) {
-            NoteInputScreen(
-                onBackClick = {
-                    navController.popBackStack()
-                },
-                onSaveClick = {
-                    // Save a note
-                }
             )
         }
     }

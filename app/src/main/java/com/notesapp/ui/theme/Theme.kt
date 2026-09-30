@@ -1,6 +1,7 @@
 package com.notesapp.ui.theme
 
 import android.os.Build
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.darkColorScheme
 import androidx.compose.material3.dynamicDarkColorScheme
@@ -19,25 +20,25 @@ private val DarkColorScheme =
 private val LightColorScheme =
     lightColorScheme(
         primary = Purple40,
-        onPrimary = NotesWhite,
         secondary = PurpleGrey40,
-        onSecondary = NotesWhite,
         tertiary = Pink40,
-        onTertiary = NotesWhite,
-        background = NotesWhite,
-        onBackground = NotesBlack,
-        surface = NotesWhite,
-        onSurface = NotesBlack,
-        surfaceContainer = NotesWhite,
-        outlineVariant = NotesDivider,
+    /* Other default colors to override
+    background = Color(0xFFFFFBFE),
+    surface = Color(0xFFFFFBFE),
+    onPrimary = Color.White,
+    onSecondary = Color.White,
+    onTertiary = Color.White,
+    onBackground = Color(0xFF1C1B1F),
+    onSurface = Color(0xFF1C1B1F),
+     */
     )
 
 @Composable
 @Suppress("ktlint:standard:function-naming")
 fun NotesAppTheme(
-    darkTheme: Boolean = false,
+    darkTheme: Boolean = isSystemInDarkTheme(),
     // Dynamic color is available on Android 12+
-    dynamicColor: Boolean = false,
+    dynamicColor: Boolean = true,
     content: @Composable () -> Unit,
 ) {
     val colorScheme =

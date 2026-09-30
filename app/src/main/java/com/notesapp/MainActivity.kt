@@ -1,9 +1,7 @@
 package com.notesapp
 
-import android.graphics.Color
 import android.os.Bundle
 import androidx.activity.ComponentActivity
-import androidx.activity.SystemBarStyle
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
@@ -24,16 +22,7 @@ class MainActivity : ComponentActivity() {
             viewModel.isLoading.value
         }
 
-        enableEdgeToEdge(
-            statusBarStyle = SystemBarStyle.light(
-                Color.WHITE,
-                Color.WHITE,
-            ),
-            navigationBarStyle = SystemBarStyle.light(
-                Color.LTGRAY,
-                Color.LTGRAY,
-            ),
-        )
+        enableEdgeToEdge()
         setContent {
             NotesAppTheme {
                 val navController = rememberNavController()
