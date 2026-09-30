@@ -43,9 +43,9 @@ jobs:
           java-version: "17"
 
       - name: Setup Android SDK
-        uses: android-actions/setup-android@v3
+        uses: android-actions/setup-android@v4
         with:
-          packages: tools platform-tools platforms;android-37.0
+          packages: platform-tools platforms;android-37.0
 
       - name: Link API 37 platform path
         run: ln -sfn "$ANDROID_HOME/platforms/android-37.0" "$ANDROID_HOME/platforms/android-37"
