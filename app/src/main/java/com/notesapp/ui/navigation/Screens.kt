@@ -6,4 +6,6 @@ sealed class Screens(
     object MainScreen : Screens("main_screen")
 
     object GettingStartedScreen : Screens("getting_started_screen")
+
+    object NoteInputScreen : Screens("note_input_screen")
 }
