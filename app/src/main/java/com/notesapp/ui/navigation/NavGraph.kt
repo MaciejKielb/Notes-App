@@ -7,6 +7,7 @@ import androidx.navigation.compose.composable
 import com.notesapp.ui.gettingstarted.GettingStartedScreen
 import com.notesapp.ui.mainscreen.MainScreen
 import com.notesapp.ui.notes.NoteInputScreen
+import com.notesapp.ui.notes.NoteInputViewModel
 import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
@@ -30,12 +31,22 @@ fun SetupNavGraph(
             )
         }
         composable(Screens.NoteInputScreen.route) {
+            val noteInputViewModel = koinViewModel<NoteInputViewModel>()
             NoteInputScreen(
                 onBackClick = {
                     navController.popBackStack()
                 },
-                onSaveClick = {
-                    // Save a note
+                onSaveClick = { text ->
+                    if(text.isBlank()) return@NoteInputScreen
+
+                    noteInputViewModel.saveNote(
+                        note = com.notesapp.data.Notes(
+                            title = text.trim(),
+                            text = text.trim(),
+                            createdOn = System.currentTimeMillis(),
+                            updatedOn = System.currentTimeMillis(),
+                        )
+                    )
                 }
             )
         }

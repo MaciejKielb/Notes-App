@@ -5,7 +5,6 @@ import androidx.compose.foundation.layout.RowScope
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.TopAppBarColors
 import androidx.compose.material3.TopAppBar as M3TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
@@ -17,7 +16,7 @@ import androidx.compose.ui.unit.dp
 @Composable
 fun BaseTopBar(
     modifier: Modifier = Modifier,
-    title: @Composable () -> Unit ,
+    title: @Composable () -> Unit,
     navigationIcon: @Composable () -> Unit = {},
     actions: @Composable RowScope.() -> Unit = {},
 ) {
@@ -40,4 +39,3 @@ fun BaseTopBar(
         )
     }
 }
-

@@ -23,7 +23,6 @@ import androidx.compose.ui.unit.dp
 import com.notesapp.R
 import com.notesapp.ui.topbar.BaseTopBar
 
-@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun NoteInputScreen(
     onBackClick: () -> Unit,
