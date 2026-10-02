@@ -21,7 +21,8 @@ fun SetupNavGraph(
     ) {
         composable(Screens.MainScreen.route) {
             MainScreen(
-                navController = navController
+                navController = navController,
+                viewModel = koinViewModel()
             )
         }
         composable(Screens.GettingStartedScreen.route) {
@@ -38,7 +39,6 @@ fun SetupNavGraph(
                 },
                 onSaveClick = { text ->
                     if(text.isBlank()) return@NoteInputScreen
-
                     noteInputViewModel.saveNote(
                         note = com.notesapp.data.Notes(
                             title = text.trim(),

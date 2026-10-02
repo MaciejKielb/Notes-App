@@ -27,8 +27,10 @@ import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Card
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.notesapp.data.Notes
@@ -36,9 +38,13 @@ import com.notesapp.ui.theme.NotesAppTheme
 import com.notesapp.ui.topbar.MainScreenDrawer
 
 @Composable
-fun MainScreen(navController: NavHostController) {
+fun MainScreen(
+    navController: NavHostController,
+    viewModel: MainScreenViewModel
+) {
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
     val scope = rememberCoroutineScope()
+    val listOfNotes by viewModel.getNotesOrderedByDateDesc.collectAsStateWithLifecycle(initialValue = emptyList())
 
     ModalNavigationDrawer(
         drawerState = drawerState,
@@ -77,7 +83,9 @@ fun MainScreen(navController: NavHostController) {
                 )
             },
         ) { innerPadding ->
-                NotesPlaceholder(modifier = Modifier.padding(innerPadding))
+                NotesPlaceholder(
+                    notesList = listOfNotes,
+                    modifier = Modifier.padding(innerPadding))
             }
         }
     }
@@ -131,10 +139,10 @@ fun ListRow(note: Notes) {
     }
 }
 
-@Preview(name = "Main Screen", showBackground = true, widthDp = 390, heightDp = 844)
-@Composable
-fun PreviewMainScreen() {
-    NotesAppTheme {
-        MainScreen(navController = rememberNavController())
-    }
-}
+//@Preview(name = "Main Screen", showBackground = true, widthDp = 390, heightDp = 844)
+//@Composable
+//fun PreviewMainScreen() {
+//    NotesAppTheme {
+//        MainScreen(navController = rememberNavController())
+//    }
+//}

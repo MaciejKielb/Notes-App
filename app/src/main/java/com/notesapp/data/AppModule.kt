@@ -2,6 +2,7 @@ package com.notesapp.data
 
 import androidx.room.Room
 import com.notesapp.ui.gettingstarted.GettingStartedViewModel
+import com.notesapp.ui.mainscreen.MainScreenViewModel
 import com.notesapp.ui.notes.NoteInputViewModel
 import com.notesapp.ui.splash.SplashViewModel
 import org.koin.android.ext.koin.androidContext
@@ -24,4 +25,5 @@ val appModule =
         viewModelOf(::GettingStartedViewModel)
         single { UserPreferences(androidContext()) }
         viewModelOf(::NoteInputViewModel)
+        viewModelOf(::MainScreenViewModel)
     }
