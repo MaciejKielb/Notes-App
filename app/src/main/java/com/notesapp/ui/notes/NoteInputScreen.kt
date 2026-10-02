@@ -35,10 +35,12 @@ fun NoteInputScreen(
         topBar = {
             NoteInputTopBar(
                 onBackClick = {
-                    onSaveClick(noteTitle, noteText)
                     onBackClick()
                 },
-                onSaveClick = { onSaveClick(noteTitle, noteText) }
+                onSaveClick = {
+                    onSaveClick(noteTitle, noteText)
+                    onBackClick()
+                }
             )
         },
     ) { innerPadding ->
