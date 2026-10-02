@@ -1,8 +1,8 @@
 package com.notesapp.ui.notes
 
-import android.annotation.SuppressLint
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
@@ -26,23 +26,26 @@ import com.notesapp.ui.topbar.BaseTopBar
 @Composable
 fun NoteInputScreen(
     onBackClick: () -> Unit,
-    onSaveClick: (String) -> Unit
+    onSaveClick: (String, String) -> Unit
 ) {
     var noteText by remember { mutableStateOf("") }
+    var noteTitle by remember { mutableStateOf("") }
 
     Scaffold(
         topBar = {
             NoteInputTopBar(
                 onBackClick = {
-                    onSaveClick(noteText)
+                    onSaveClick(noteTitle, noteText)
                     onBackClick()
                 },
-                onSaveClick = { onSaveClick(noteText) }
+                onSaveClick = { onSaveClick(noteTitle, noteText) }
             )
         },
     ) { innerPadding ->
         NoteInputContent(
+            noteTitle = noteTitle,
             noteText = noteText,
+            onNoteTitleChange = { noteTitle = it },
             onNoteTextChange = { noteText = it },
             modifier = Modifier.padding(innerPadding),
         )
@@ -71,15 +74,23 @@ fun NoteInputTopBar(
 
 @Composable
 fun NoteInputContent(
+    noteTitle: String,
     noteText: String,
+    onNoteTitleChange: (String) -> Unit,
     onNoteTextChange: (String) -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     Column(
         modifier = modifier
             .fillMaxSize()
             .padding(16.dp)
     ) {
+        OutlinedTextField(
+            value = noteTitle,
+            onValueChange = onNoteTitleChange,
+            label = { Text("Enter your Title") },
+            modifier = Modifier.fillMaxWidth()
+        )
         OutlinedTextField(
             value = noteText,
             onValueChange = onNoteTextChange,

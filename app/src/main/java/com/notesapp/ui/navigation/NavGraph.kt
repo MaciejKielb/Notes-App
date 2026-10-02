@@ -37,11 +37,11 @@ fun SetupNavGraph(
                 onBackClick = {
                     navController.popBackStack()
                 },
-                onSaveClick = { text ->
-                    if(text.isBlank()) return@NoteInputScreen
+                onSaveClick = { title, text ->
+                    if(title.isBlank() || text.isBlank()) return@NoteInputScreen
                     noteInputViewModel.saveNote(
                         note = com.notesapp.data.Notes(
-                            title = text.trim(),
+                            title = title.trim(),
                             text = text.trim(),
                             createdOn = System.currentTimeMillis(),
                             updatedOn = System.currentTimeMillis(),
