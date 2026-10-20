@@ -1,5 +1,6 @@
 package com.notesapp.ui.mainscreen
 
+import android.annotation.SuppressLint
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -31,10 +32,14 @@ import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Card
 import androidx.compose.material3.Icon
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.text.font.FontWeight
@@ -46,6 +51,7 @@ import androidx.navigation.NavHostController
 import com.notesapp.data.Notes
 import com.notesapp.ui.topbar.MainScreenDrawer
 
+@SuppressLint("CoroutineCreationDuringComposition")
 @Composable
 fun MainScreen(
     navController: NavHostController,
@@ -54,6 +60,8 @@ fun MainScreen(
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
     val scope = rememberCoroutineScope()
     val listOfNotes by viewModel.getNotesOrderedByDateDesc.collectAsStateWithLifecycle(initialValue = emptyList())
+    var showDialog by remember { mutableStateOf(false) }
+    var noteToDelete by remember { mutableStateOf<Notes?>(null) }
 
     ModalNavigationDrawer(
         drawerState = drawerState,
@@ -96,10 +104,42 @@ fun MainScreen(
                     notesList = listOfNotes,
                     modifier = Modifier.padding(innerPadding),
                     onDeleteClick = { note ->
-                        viewModel.deleteNote(note)
+                        noteToDelete = note
+                        showDialog = true
                     }
                 )
             }
+            if (showDialog) {
+            AlertDialog(
+                onDismissRequest = { showDialog = false },
+                title = { Text(text = "Are you sure you want to delete this note?") },
+                text = { Text(text = "This cannot be undone.") },
+                confirmButton = {
+                    Text(
+                        text = "OK",
+                        modifier = Modifier
+                            .clickable {
+                                noteToDelete?.let { viewModel.deleteNote(it) }
+                                showDialog = false
+                            }
+                            .padding(8.dp),
+                        color = MaterialTheme.colorScheme.primary,
+                        fontWeight = FontWeight.Bold
+                    )
+                },
+                dismissButton = {
+                    Text(
+                        text = "Cancel",
+                        modifier = Modifier
+                            .clickable {
+                                showDialog = false
+                            }
+                            .padding(8.dp),
+                        color = MaterialTheme.colorScheme.primary,
+                        fontWeight = FontWeight.Bold
+                    )
+                }
+            ) }
         }
     }
 
