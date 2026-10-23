@@ -1,6 +1,5 @@
 package com.notesapp.ui.navigation
 
-import android.R.attr.type
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
@@ -24,8 +23,13 @@ fun SetupNavGraph(
     ) {
         composable(Screens.MainScreen.route) {
             MainScreen(
-                navController = navController,
-                viewModel = koinViewModel()
+                viewModel = koinViewModel(),
+                onAddNoteClick = {
+                    navController.navigate(Screens.NoteInputScreen.createRoute(0L))
+                },
+                onEditNoteClick = { noteId ->
+                    navController.navigate(Screens.NoteInputScreen.createRoute(noteId))
+                },
             )
         }
         composable(Screens.GettingStartedScreen.route) {

@@ -46,17 +46,16 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.navigation.NavHostController
 import com.notesapp.data.Notes
-import com.notesapp.ui.navigation.Screens
 import com.notesapp.ui.topbar.MainScreenDrawer
 
 @SuppressLint("CoroutineCreationDuringComposition")
 @Composable
 fun MainScreen(
-    navController: NavHostController,
-    viewModel: MainScreenViewModel
-) {
+    viewModel: MainScreenViewModel,
+    onAddNoteClick: () -> Unit,
+    onEditNoteClick: (Long) -> Unit,
+){
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
     val scope = rememberCoroutineScope()
     val listOfNotes by viewModel.getNotesOrderedByDateDesc.collectAsStateWithLifecycle(initialValue = emptyList())
@@ -95,7 +94,7 @@ fun MainScreen(
                         scope.launch { drawerState.open() }
                     },
                     onAddNoteClick = {
-                        navController.navigate(Screens.NoteInputScreen.createRoute(0))
+                        onAddNoteClick()
                     }
                 )
             },
@@ -104,7 +103,7 @@ fun MainScreen(
                     notesList = listOfNotes,
                     modifier = Modifier.padding(innerPadding),
                     onNoteClick = { note ->
-                        navController.navigate(Screens.NoteInputScreen.createRoute(note.id))
+                        onEditNoteClick(note.id)
                     },
                     onDeleteClick = { note ->
                         noteToDelete = note
