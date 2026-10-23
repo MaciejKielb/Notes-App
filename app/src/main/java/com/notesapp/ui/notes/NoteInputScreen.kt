@@ -29,7 +29,6 @@ fun NoteInputScreen(
     noteId: Long,
     viewModel: NoteInputViewModel,
     onBackClick: () -> Unit,
-    onSaveClick: (String, String) -> Unit,
 ) {
     var noteText by remember { mutableStateOf("") }
     var noteTitle by remember { mutableStateOf("") }
@@ -52,8 +51,12 @@ fun NoteInputScreen(
                     onBackClick()
                 },
                 onSaveClick = {
-                    onSaveClick(noteTitle, noteText)
-                    onBackClick()
+                    viewModel.saveNote(
+                        noteId = noteId,
+                        title = noteTitle,
+                        text = noteText,
+                        onSuccess = onBackClick,
+                    )
                 }
             )
         },

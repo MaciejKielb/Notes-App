@@ -36,7 +36,7 @@ fun SetupNavGraph(
         composable(
             route = Screens.NoteInputScreen.route,
             arguments = listOf(
-                navArgument("noteId") { type = NavType.LongType }
+                navArgumednt("noteId") { type = NavType.LongType }
             ),
         ) { backStackEntry ->
             val noteId = backStackEntry.arguments?.getLong("noteId") ?: 0L
@@ -47,18 +47,6 @@ fun SetupNavGraph(
                 onBackClick = {
                     navController.popBackStack()
                 },
-                onSaveClick = { title, text ->
-                    if (title.isBlank()) return@NoteInputScreen
-                    noteInputViewModel.saveNote(
-                        note = com.notesapp.data.Notes(
-                            id = noteId,
-                            title = title.trim(),
-                            text = text.trim(),
-                            createdOn = System.currentTimeMillis(),
-                            updatedOn = System.currentTimeMillis(),
-                        )
-                    )
-                }
             )
         }
     }
