@@ -1,5 +1,6 @@
 package com.notesapp.ui.navigation
 
+import android.R.attr.type
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
@@ -36,7 +37,7 @@ fun SetupNavGraph(
         composable(
             route = Screens.NoteInputScreen.route,
             arguments = listOf(
-                navArgumednt("noteId") { type = NavType.LongType }
+                navArgument("noteId") { type = NavType.LongType }
             ),
         ) { backStackEntry ->
             val noteId = backStackEntry.arguments?.getLong("noteId") ?: 0L

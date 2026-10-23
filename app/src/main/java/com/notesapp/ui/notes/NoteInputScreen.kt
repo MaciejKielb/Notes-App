@@ -15,12 +15,10 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.notesapp.R
 import com.notesapp.ui.topbar.BaseTopBar
 
@@ -30,42 +28,28 @@ fun NoteInputScreen(
     viewModel: NoteInputViewModel,
     onBackClick: () -> Unit,
 ) {
-    var noteText by remember { mutableStateOf("") }
-    var noteTitle by remember { mutableStateOf("") }
+    val noteText by viewModel.text.collectAsStateWithLifecycle()
+    val noteTitle by viewModel.title.collectAsStateWithLifecycle()
 
     LaunchedEffect(noteId) {
-        if (noteId != 0L) {
-            viewModel.getNoteById(noteId) { note ->
-                if (note != null) {
-                    noteTitle = note.title
-                    noteText = note.text
-                }
-            }
-        }
+        viewModel.load(noteId)
     }
 
     Scaffold(
         topBar = {
             NoteInputTopBar(
-                onBackClick = {
-                    onBackClick()
-                },
+                onBackClick = onBackClick,
                 onSaveClick = {
-                    viewModel.saveNote(
-                        noteId = noteId,
-                        title = noteTitle,
-                        text = noteText,
-                        onSuccess = onBackClick,
-                    )
-                }
+                    viewModel.saveNote(onSuccess = onBackClick)
+                },
             )
         },
     ) { innerPadding ->
         NoteInputContent(
             noteTitle = noteTitle,
             noteText = noteText,
-            onNoteTitleChange = { noteTitle = it },
-            onNoteTextChange = { noteText = it },
+            onNoteTitleChange = viewModel::onTitleChange,
+            onNoteTextChange = viewModel::onTextChange,
             modifier = Modifier.padding(innerPadding),
         )
     }
