@@ -46,9 +46,9 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import com.notesapp.data.Notes
+import com.notesapp.ui.navigation.Screens
 import com.notesapp.ui.topbar.MainScreenDrawer
 
 @SuppressLint("CoroutineCreationDuringComposition")
@@ -95,7 +95,7 @@ fun MainScreen(
                         scope.launch { drawerState.open() }
                     },
                     onAddNoteClick = {
-                        navController.navigate("note_input_screen")
+                        navController.navigate(Screens.NoteInputScreen.createRoute(0))
                     }
                 )
             },
@@ -103,6 +103,9 @@ fun MainScreen(
                 NotesPlaceholder(
                     notesList = listOfNotes,
                     modifier = Modifier.padding(innerPadding),
+                    onNoteClick = { note ->
+                        navController.navigate(Screens.NoteInputScreen.createRoute(note.id))
+                    },
                     onDeleteClick = { note ->
                         noteToDelete = note
                         showDialog = true
@@ -147,7 +150,8 @@ fun MainScreen(
 fun NotesPlaceholder(
     notesList: List<Notes> = emptyList(),
     modifier: Modifier,
-    onDeleteClick: (Notes) -> Unit = {}
+    onDeleteClick: (Notes) -> Unit = {},
+    onNoteClick: (Notes) -> Unit = {}
 ) {
     val listState = rememberLazyListState()
     LaunchedEffect(notesList.firstOrNull()?.id) {
@@ -167,7 +171,9 @@ fun NotesPlaceholder(
                     items = notesList,
                     key = { it.id }
                     ) { item ->
-                    ListRow(note = item, onDeleteClick = {
+                    NoteCard(note = item, onNoteClick = {
+                        onNoteClick(item)
+                    }, onDeleteClick = {
                         onDeleteClick(item)
                     })
                 }
@@ -189,9 +195,10 @@ fun NotesPlaceholder(
 }
 
 @Composable
-fun ListRow(
+fun NoteCard(
     note: Notes,
-    onDeleteClick: () -> Unit
+    onDeleteClick: () -> Unit,
+    onNoteClick: () -> Unit = {}
 ) {
     Row(
         modifier = Modifier
@@ -201,10 +208,11 @@ fun ListRow(
         Card(
             modifier = Modifier
                 .fillMaxWidth()
-                .height(88.dp),
+                .height(88.dp)
+                .clickable(onClick = onNoteClick),
             shape = RoundedCornerShape(16.dp),
             ) {
-            Row(modifier = Modifier.clickable(onClick = { /* Handle note click */ })) {
+            Row {
                 Text(
                     text = note.title,
                     fontWeight = FontWeight.Bold,

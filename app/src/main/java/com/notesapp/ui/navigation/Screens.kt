@@ -7,5 +7,7 @@ sealed class Screens(
 
     object GettingStartedScreen : Screens("getting_started_screen")
 
-    object NoteInputScreen : Screens("note_input_screen")
+    object NoteInputScreen : Screens("note_input_screen/{noteId}") {
+        fun createRoute(noteId: Long) = "note_input_screen/$noteId"
+    }
 }

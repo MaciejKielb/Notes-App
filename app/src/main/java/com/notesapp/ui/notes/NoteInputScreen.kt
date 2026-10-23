@@ -13,6 +13,7 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -25,11 +26,24 @@ import com.notesapp.ui.topbar.BaseTopBar
 
 @Composable
 fun NoteInputScreen(
+    noteId: Long,
+    viewModel: NoteInputViewModel,
     onBackClick: () -> Unit,
-    onSaveClick: (String, String) -> Unit
+    onSaveClick: (String, String) -> Unit,
 ) {
     var noteText by remember { mutableStateOf("") }
     var noteTitle by remember { mutableStateOf("") }
+
+    LaunchedEffect(noteId) {
+        if (noteId != 0L) {
+            viewModel.getNoteById(noteId) { note ->
+                if (note != null) {
+                    noteTitle = note.title
+                    noteText = note.text
+                }
+            }
+        }
+    }
 
     Scaffold(
         topBar = {

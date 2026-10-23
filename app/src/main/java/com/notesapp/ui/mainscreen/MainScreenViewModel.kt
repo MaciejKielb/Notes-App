@@ -23,5 +23,4 @@ class MainScreenViewModel(
             repository.deleteNote(note)
         }
     }
-
 }

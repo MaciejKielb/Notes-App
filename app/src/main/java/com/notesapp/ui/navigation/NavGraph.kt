@@ -2,8 +2,10 @@ package com.notesapp.ui.navigation
 
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.navArgument
 import com.notesapp.ui.gettingstarted.GettingStartedScreen
 import com.notesapp.ui.mainscreen.MainScreen
 import com.notesapp.ui.notes.NoteInputScreen
@@ -31,9 +33,17 @@ fun SetupNavGraph(
                 navController = navController,
             )
         }
-        composable(Screens.NoteInputScreen.route) {
+        composable(
+            route = Screens.NoteInputScreen.route,
+            arguments = listOf(
+                navArgument("noteId") { type = NavType.LongType }
+            ),
+        ) { backStackEntry ->
+            val noteId = backStackEntry.arguments?.getLong("noteId") ?: 0L
             val noteInputViewModel = koinViewModel<NoteInputViewModel>()
             NoteInputScreen(
+                noteId = noteId,
+                viewModel = noteInputViewModel,
                 onBackClick = {
                     navController.popBackStack()
                 },
@@ -41,6 +51,7 @@ fun SetupNavGraph(
                     if (title.isBlank()) return@NoteInputScreen
                     noteInputViewModel.saveNote(
                         note = com.notesapp.data.Notes(
+                            id = noteId,
                             title = title.trim(),
                             text = text.trim(),
                             createdOn = System.currentTimeMillis(),

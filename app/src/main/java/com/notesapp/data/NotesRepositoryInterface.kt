@@ -7,6 +7,8 @@ interface NotesRepositoryInterface {
 
     suspend fun deleteNote(note: Notes)
 
+    fun getNoteById(noteId: Long): Flow<Notes?>
+
     fun getAllNotes(): Flow<List<Notes>>
 
     fun getNotesOrderedByDateDesc(): Flow<List<Notes>>
