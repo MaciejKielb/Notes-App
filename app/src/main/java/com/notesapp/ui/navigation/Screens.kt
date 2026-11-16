@@ -10,4 +10,6 @@ sealed class Screens(
     object NoteInputScreen : Screens("note_input_screen/{noteId}") {
         fun createRoute(noteId: Long) = "note_input_screen/$noteId"
     }
+
+    object QrCodeScannerScreen : Screens("qr_code_scanner_screen")
 }

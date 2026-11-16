@@ -46,7 +46,9 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.navigation.NavHostController
 import com.notesapp.data.Notes
+import com.notesapp.ui.navigation.Screens
 import com.notesapp.ui.topbar.MainScreenDrawer
 
 @SuppressLint("CoroutineCreationDuringComposition")
@@ -55,6 +57,7 @@ fun MainScreen(
     viewModel: MainScreenViewModel,
     onAddNoteClick: () -> Unit,
     onEditNoteClick: (Long) -> Unit,
+    navController: NavHostController,
 ){
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
     val scope = rememberCoroutineScope()
@@ -75,10 +78,14 @@ fun MainScreen(
             ) {
                 MainScreenDrawer(
                     onCloseClick = {
+
                         scope.launch { drawerState.close()
                         }
                     },
                     onItemClick = {
+                        if (it.id == "QR Scanner") {
+                            navController.navigate(Screens.QrCodeScannerScreen.route)
+                        }
                         scope.launch { drawerState.close()
                         }
                     },
