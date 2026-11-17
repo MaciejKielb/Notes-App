@@ -31,7 +31,8 @@ fun SetupNavGraph(
                 onEditNoteClick = { noteId ->
                     navController.navigate(Screens.NoteInputScreen.createRoute(noteId))
                 },
-                navController = navController,
+                openQrCodeScanner = { navController.navigate(Screens.QrCodeScannerScreen.route)
+                },
             )
         }
         composable(Screens.GettingStartedScreen.route) {
