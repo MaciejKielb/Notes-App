@@ -2,6 +2,7 @@ package com.notesapp.ui.mainscreen
 
 import android.annotation.SuppressLint
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -32,18 +33,24 @@ import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material.icons.filled.Share
+import androidx.compose.material.icons.outlined.Email
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Card
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
+import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.notesapp.data.Notes
@@ -61,7 +68,9 @@ fun MainScreen(
     val scope = rememberCoroutineScope()
     val listOfNotes by viewModel.getNotesOrderedByDateDesc.collectAsStateWithLifecycle(initialValue = emptyList())
     var showDialog by remember { mutableStateOf(false) }
+    var showNoteOptions by remember { mutableStateOf(false) }
     var noteToDelete by remember { mutableStateOf<Notes?>(null) }
+    var selectedNote by remember { mutableStateOf<Notes?>(null) }
 
     ModalNavigationDrawer(
         drawerState = drawerState,
@@ -110,10 +119,20 @@ fun MainScreen(
                     onNoteClick = { note ->
                         onEditNoteClick(note.id)
                     },
-                    onDeleteClick = { note ->
-                        noteToDelete = note
+                    onLongClick = { note ->
+                        selectedNote = note
+                        showNoteOptions = true
+                    },
+                )
+        }
+            if (showNoteOptions) {
+                NoteOptionsBottomSheet(
+                    onDismiss = { showNoteOptions = false },
+                    onDeleteClick = {
+                        noteToDelete = selectedNote
+                        showNoteOptions = false
                         showDialog = true
-                    }
+                    },
                 )
             }
             if (showDialog) {
@@ -154,8 +173,8 @@ fun MainScreen(
 fun NotesPlaceholder(
     notesList: List<Notes> = emptyList(),
     modifier: Modifier,
-    onDeleteClick: (Notes) -> Unit = {},
-    onNoteClick: (Notes) -> Unit = {}
+    onNoteClick: (Notes) -> Unit = {},
+    onLongClick: (Notes) -> Unit
 ) {
     val listState = rememberLazyListState()
     LaunchedEffect(notesList.firstOrNull()?.id) {
@@ -175,13 +194,17 @@ fun NotesPlaceholder(
                     items = notesList,
                     key = { it.id }
                     ) { item ->
-                    NoteCard(note = item, onNoteClick = {
-                        onNoteClick(item)
-                    }, onDeleteClick = {
-                        onDeleteClick(item)
-                    })
+                            NoteCard(
+                                note = item,
+                                onNoteClick = {
+                                    onNoteClick(item)
+                                },
+                                onLongClick = {
+                                    onLongClick(item)
+                                }
+                            )
+                    }
                 }
-            }
         } else {
             Column(
                 modifier = modifier.fillMaxSize(),
@@ -201,8 +224,8 @@ fun NotesPlaceholder(
 @Composable
 fun NoteCard(
     note: Notes,
-    onDeleteClick: () -> Unit,
-    onNoteClick: () -> Unit = {}
+    onNoteClick: () -> Unit = {},
+    onLongClick: () -> Unit = {},
 ) {
     Row(
         modifier = Modifier
@@ -213,7 +236,10 @@ fun NoteCard(
             modifier = Modifier
                 .fillMaxWidth()
                 .height(88.dp)
-                .clickable(onClick = onNoteClick),
+                .combinedClickable(
+                    onClick = onNoteClick,
+                    onLongClick = onLongClick
+                ),
             shape = RoundedCornerShape(16.dp),
             ) {
             Row {
@@ -226,16 +252,6 @@ fun NoteCard(
                     modifier = Modifier
                         .padding(8.dp)
                         .weight(1f)
-                )
-                Icon(
-                    imageVector = Icons.Default.Delete,
-                    contentDescription = "Delete note icon button",
-                    modifier = Modifier
-                        .padding(8.dp)
-                        .clickable(onClick = {
-                            onDeleteClick()
-                        }
-                    )
                 )
             }
 
@@ -250,6 +266,70 @@ fun NoteCard(
             )
         }
     }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun NoteOptionsBottomSheet(
+    onDismiss: () -> Unit,
+    onDeleteClick: () -> Unit,
+) {
+    ModalBottomSheet(
+        onDismissRequest = onDismiss,
+    ) {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(top = 24.dp, bottom = 72.dp),
+            horizontalArrangement = Arrangement.SpaceEvenly,
+        ) {
+            NoteOption(
+                icon = Icons.Default.Share,
+                label = "Share Note",
+            )
+            NoteOption(
+                icon = Icons.Outlined.Email,
+                label = "Export Note",
+            )
+            NoteOption(
+                icon = Icons.Default.Delete,
+                label = "Delete Note",
+                onClick = onDeleteClick,
+            )
+        }
+    }
+}
+
+@Composable
+private fun NoteOption(
+    icon: ImageVector,
+    label: String,
+    onClick: () -> Unit = {},
+) {
+    Column(
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.spacedBy(8.dp),
+        modifier = Modifier.clickable(onClick = onClick),
+    ) {
+        Icon(
+            imageVector = icon,
+            contentDescription = label,
+        )
+        Text(
+            text = label,
+            style = MaterialTheme.typography.bodyMedium,
+            textAlign = TextAlign.Center,
+        )
+    }
+}
+
+@Preview(name = "Note Options", showBackground = true, widthDp = 390, heightDp = 390)
+@Composable
+fun PreviewNoteOptionsBottomSheet() {
+    NoteOptionsBottomSheet(
+        onDismiss = {},
+        onDeleteClick = {},
+    )
 }
 
 //@Preview(name = "Main Screen", showBackground = true, widthDp = 390, heightDp = 844)
