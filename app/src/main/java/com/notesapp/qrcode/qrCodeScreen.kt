@@ -1,15 +1,16 @@
-package com.notesapp.qrcodescanner
+package com.notesapp.qrcode
 
 import android.Manifest
 import android.content.pm.PackageManager
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.camera.compose.CameraXViewfinder
 import androidx.camera.core.CameraSelector
 import androidx.camera.core.ImageAnalysis
 import androidx.camera.core.ImageAnalysis.STRATEGY_KEEP_ONLY_LATEST
 import androidx.camera.core.Preview
+import androidx.camera.core.SurfaceRequest
 import androidx.camera.lifecycle.ProcessCameraProvider
-import androidx.camera.view.PreviewView
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
@@ -35,7 +36,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.compose.LocalLifecycleOwner
 
@@ -43,9 +43,9 @@ import androidx.lifecycle.compose.LocalLifecycleOwner
 fun QrCodeScreen(
     onBackClick: () -> Unit,
 ) {
-    var code by remember {
-        mutableStateOf("")
-    }
+    var code by remember { mutableStateOf("") }
+    var surfaceRequest by remember { mutableStateOf<SurfaceRequest?>(null) }
+
     val context = LocalContext.current
     val lifecycleOwner = LocalLifecycleOwner.current
     val cameraProviderFuture = remember {
@@ -65,57 +65,68 @@ fun QrCodeScreen(
             hasCameraPermissions = isGranted
         }
     )
+    val preview = remember {
+        Preview.Builder().build().apply {
+            setSurfaceProvider { request -> surfaceRequest = request }
+        }
+    }
+    val selector = remember {
+        CameraSelector.Builder()
+            .requireLensFacing(CameraSelector.LENS_FACING_BACK)
+            .build()
+    }
+    val imageAnalysis = remember {
+        ImageAnalysis.Builder()
+            .setBackpressureStrategy(STRATEGY_KEEP_ONLY_LATEST)
+            .build()
+            .apply {
+                setAnalyzer(
+                    ContextCompat.getMainExecutor(context),
+                    qrCodeAnalyzer { result ->
+                        code = result
+                    }
+                )
+            }
+    }
+
     LaunchedEffect(true) {
         launcher.launch(Manifest.permission.CAMERA)
     }
+
+    LaunchedEffect(hasCameraPermissions) {
+        if (!hasCameraPermissions) return@LaunchedEffect
+        cameraProviderFuture.addListener(
+            {
+                val cameraProvider = cameraProviderFuture.get()
+                cameraProvider.unbindAll()
+                cameraProvider.bindToLifecycle(
+                    lifecycleOwner,
+                    selector,
+                    preview,
+                    imageAnalysis,
+                )
+            },
+            ContextCompat.getMainExecutor(context),
+        )
+    }
+
     Box(
         modifier = Modifier
             .fillMaxSize()
             .windowInsetsPadding(WindowInsets.statusBars)
         ) {
         if (hasCameraPermissions) {
-            AndroidView(
-                modifier = Modifier.fillMaxSize(),
-                factory = { context ->
-                    val previewView = PreviewView(context)
-                    val preview = Preview.Builder().build()
-                    val selector = CameraSelector.Builder()
-                        .requireLensFacing(CameraSelector.LENS_FACING_BACK)
-                        .build()
-                    preview.surfaceProvider = previewView.surfaceProvider
-                    val imageAnalysis = ImageAnalysis.Builder()
-                        .setBackpressureStrategy(STRATEGY_KEEP_ONLY_LATEST)
-                        .build()
-                    imageAnalysis.setAnalyzer(
-                        ContextCompat.getMainExecutor(context),
-                        qrCodeAnalyzer { result ->
-                            code = result
-                        }
-                    )
-                    cameraProviderFuture.addListener(
-                        {
-                            try {
-                                cameraProviderFuture.get().bindToLifecycle(
-                                    lifecycleOwner,
-                                    selector,
-                                    preview,
-                                    imageAnalysis
-                                )
-                            } catch (e: Exception) {
-                                e.printStackTrace()
-                            }
-                        },
-                        ContextCompat.getMainExecutor(context)
-                    )
-                    previewView.implementationMode = PreviewView.ImplementationMode.COMPATIBLE
-                    previewView
-                },
-            )
+            surfaceRequest?.let { request ->
+                CameraXViewfinder(
+                    surfaceRequest = request,
+                    modifier = Modifier.fillMaxSize(),
+                )
+            }
         }
+        QrTopBar(
+            onBackClick = onBackClick
+        )
     }
-    QrTopBar(
-        onBackClick = onBackClick
-    )
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
