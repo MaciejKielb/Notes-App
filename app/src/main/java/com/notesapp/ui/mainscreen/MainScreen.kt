@@ -63,6 +63,7 @@ fun MainScreen(
     onAddNoteClick: () -> Unit,
     onEditNoteClick: (Long) -> Unit,
     openQrCodeScanner: () -> Unit,
+    openExportScreen: () -> Unit,
 ){
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
     val scope = rememberCoroutineScope()
@@ -133,6 +134,9 @@ fun MainScreen(
                         showNoteOptions = false
                         showDialog = true
                     },
+                    onExportClick = {
+                        openExportScreen()
+                    }
                 )
             }
             if (showDialog) {
@@ -273,6 +277,7 @@ fun NoteCard(
 fun NoteOptionsBottomSheet(
     onDismiss: () -> Unit,
     onDeleteClick: () -> Unit,
+    onExportClick: () -> Unit,
 ) {
     ModalBottomSheet(
         onDismissRequest = onDismiss,
@@ -290,6 +295,7 @@ fun NoteOptionsBottomSheet(
             NoteOption(
                 icon = Icons.Outlined.Email,
                 label = "Export Note",
+                onClick = onExportClick
             )
             NoteOption(
                 icon = Icons.Default.Delete,
@@ -328,6 +334,7 @@ private fun NoteOption(
 fun PreviewNoteOptionsBottomSheet() {
     NoteOptionsBottomSheet(
         onDismiss = {},
+        onExportClick = {},
         onDeleteClick = {},
     )
 }

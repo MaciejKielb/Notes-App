@@ -7,6 +7,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import com.notesapp.qrcodescanner.QrCodeScreen
+import com.notesapp.ui.exportscreen.ExportScreen
 import com.notesapp.ui.gettingstarted.GettingStartedScreen
 import com.notesapp.ui.mainscreen.MainScreen
 import com.notesapp.ui.notes.NoteInputScreen
@@ -32,6 +33,8 @@ fun SetupNavGraph(
                     navController.navigate(Screens.NoteInputScreen.createRoute(noteId))
                 },
                 openQrCodeScanner = { navController.navigate(Screens.QrCodeScannerScreen.route)
+                },
+                openExportScreen = { navController.navigate(Screens.ExportScreen.route)
                 },
             )
         }
@@ -64,6 +67,13 @@ fun SetupNavGraph(
                 onBackClick = {
                     navController.popBackStack()
                 }
+            )
+        }
+        composable(Screens.ExportScreen.route) {
+            ExportScreen(
+                onBackClick = {
+                    navController.popBackStack()
+                },
             )
         }
     }
