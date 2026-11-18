@@ -6,7 +6,7 @@ import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
-import com.notesapp.qrcodescanner.QrCodeScreen
+import com.notesapp.qrcode.QrCodeScreen
 import com.notesapp.ui.exportscreen.ExportScreen
 import com.notesapp.ui.gettingstarted.GettingStartedScreen
 import com.notesapp.ui.mainscreen.MainScreen

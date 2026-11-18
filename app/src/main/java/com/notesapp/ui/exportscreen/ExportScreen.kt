@@ -39,7 +39,6 @@ fun ExportScreen(
         TopBarExport(onBackClick = onBackClick)
     }
 
-
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -62,7 +61,6 @@ fun TopBarExport(
         }
     )
 }
-
 
 @Preview(name = "Export Screen", showBackground = true, widthDp = 390, heightDp = 844)
 @Composable

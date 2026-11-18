@@ -1,4 +1,4 @@
-package com.notesapp.qrcodescanner
+package com.notesapp.qrcode
 
 import android.graphics.ImageFormat
 import androidx.camera.core.ImageAnalysis
@@ -21,7 +21,7 @@ class qrCodeAnalyzer(
         ImageFormat.YUV_444_888,
     )
     override fun analyze(image: ImageProxy) {
-        if(image.format in supportedImageFormat) {
+        if (image.format in supportedImageFormat) {
             val bytes = image.planes.first().buffer.toByteArray()
 
             val source = PlanarYUVLuminanceSource(
@@ -52,7 +52,6 @@ class qrCodeAnalyzer(
                 image.close()
             }
         }
-
     }
 
     private fun ByteBuffer.toByteArray(): ByteArray {
