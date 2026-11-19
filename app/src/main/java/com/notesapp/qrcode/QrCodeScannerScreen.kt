@@ -82,7 +82,7 @@ fun QrCodeScreen(
             .apply {
                 setAnalyzer(
                     ContextCompat.getMainExecutor(context),
-                    qrCodeAnalyzer { result ->
+                    QrCodeAnalyzer { result ->
                         code = result
                     }
                 )
