@@ -2,6 +2,7 @@ package com.notesapp.qrcode
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.size
@@ -17,6 +18,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.notesapp.ui.topbar.BaseTopBar
 
 @Composable
 fun CreateQrCodeGeneratorScreen(
@@ -31,25 +33,43 @@ fun CreateQrCodeGeneratorScreen(
         viewModel.load(noteId)
     }
 
-    Column(
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally,
+    Box (
         modifier = Modifier.fillMaxSize(),
     ) {
-        IconButton(onClick = onBackClick) {
-            Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back")
-        }
-        when {
-            isTooLong -> {
-                Text(text = "This note is too long to share as a QR code.")
+        Column(
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally,
+            modifier = Modifier.fillMaxSize()
+        ) {
+            when {
+                isTooLong -> {
+                    Text(text = "This note is too long to share as a QR code.")
+                }
+                payload != null -> {
+                    Image(
+                        painter = qrCodeGenerator(payload.orEmpty()),
+                        contentDescription = "QR code",
+                        modifier = Modifier.size(150.dp),
+                    )
+                }
             }
-            payload != null -> {
-                Image(
-                    painter = qrCodeGenerator(payload.orEmpty()),
-                    contentDescription = "QR code",
-                    modifier = Modifier.size(150.dp),
-                )
-            }
         }
+        TopBarQrGenerator(
+            onBackClick = onBackClick,
+        )
     }
+}
+
+@Composable
+fun TopBarQrGenerator(
+    onBackClick: () -> Unit
+){
+    BaseTopBar(
+        title = { Text("Note QR Code ") },
+        navigationIcon = {
+            IconButton(onClick = onBackClick ) {
+                Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back")
+            }
+        },
+    )
 }
