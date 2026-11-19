@@ -1,6 +1,7 @@
 package com.notesapp.data
 
 import androidx.room.Room
+import com.notesapp.qrcode.QrCodeViewModel
 import com.notesapp.ui.gettingstarted.GettingStartedViewModel
 import com.notesapp.ui.mainscreen.MainScreenViewModel
 import com.notesapp.ui.notes.NoteInputViewModel
@@ -26,4 +27,5 @@ val appModule =
         single { UserPreferences(androidContext()) }
         viewModelOf(::NoteInputViewModel)
         viewModelOf(::MainScreenViewModel)
+        viewModelOf(::QrCodeViewModel)
     }

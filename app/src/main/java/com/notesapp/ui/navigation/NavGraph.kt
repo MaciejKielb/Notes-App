@@ -6,7 +6,9 @@ import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
-import com.notesapp.qrcode.QrCodeScreen
+import com.notesapp.qrcode.CreateQrCodeGeneratorScreen
+import com.notesapp.qrcode.QrCodeScannerScreen
+import com.notesapp.qrcode.QrCodeViewModel
 import com.notesapp.ui.exportscreen.ExportScreen
 import com.notesapp.ui.gettingstarted.GettingStartedScreen
 import com.notesapp.ui.mainscreen.MainScreen
@@ -32,10 +34,15 @@ fun SetupNavGraph(
                 onEditNoteClick = { noteId ->
                     navController.navigate(Screens.NoteInputScreen.createRoute(noteId))
                 },
-                openQrCodeScanner = { navController.navigate(Screens.QrCodeScannerScreen.route)
+                openQrCodeScanner = {
+                    navController.navigate(Screens.QrCodeScannerScreen.route)
                 },
-                openExportScreen = { navController.navigate(Screens.ExportScreen.route)
+                openExportScreen = {
+                    navController.navigate(Screens.ExportScreen.route)
                 },
+                openQrCodeGenerator = { noteId ->
+                    navController.navigate(Screens.QrCodeGeneratorScreen.createRoute(noteId))
+                }
             )
         }
         composable(Screens.GettingStartedScreen.route) {
@@ -60,10 +67,8 @@ fun SetupNavGraph(
                 },
             )
         }
-        composable (
-            route = Screens.QrCodeScannerScreen.route
-        ) {
-            QrCodeScreen(
+        composable (Screens.QrCodeScannerScreen.route) {
+            QrCodeScannerScreen(
                 onBackClick = {
                     navController.popBackStack()
                 }
@@ -71,6 +76,21 @@ fun SetupNavGraph(
         }
         composable(Screens.ExportScreen.route) {
             ExportScreen(
+                onBackClick = {
+                    navController.popBackStack()
+                },
+            )
+        }
+        composable(
+            route = Screens.QrCodeGeneratorScreen.route,
+            arguments = listOf(
+                navArgument("noteId") { type = NavType.LongType },
+            ),
+        ) { backStackEntry ->
+            val noteId = backStackEntry.arguments?.getLong("noteId") ?: 0L
+            CreateQrCodeGeneratorScreen(
+                noteId = noteId,
+                viewModel = koinViewModel<QrCodeViewModel>(),
                 onBackClick = {
                     navController.popBackStack()
                 },

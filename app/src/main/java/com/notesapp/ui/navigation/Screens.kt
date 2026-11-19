@@ -10,4 +10,7 @@ sealed class Screens(
     }
     object QrCodeScannerScreen : Screens("qr_code_scanner_screen")
     object ExportScreen : Screens("export_screen")
+    object QrCodeGeneratorScreen : Screens("qr_code_generator_screen/{noteId}") {
+        fun createRoute(noteId: Long) = "qr_code_generator_screen/$noteId"
+    }
 }

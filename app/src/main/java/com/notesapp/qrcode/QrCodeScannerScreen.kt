@@ -40,7 +40,7 @@ import androidx.core.content.ContextCompat
 import androidx.lifecycle.compose.LocalLifecycleOwner
 
 @Composable
-fun QrCodeScreen(
+fun QrCodeScannerScreen(
     onBackClick: () -> Unit,
 ) {
     var code by remember { mutableStateOf("") }
