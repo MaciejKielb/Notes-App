@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">Notes App</string>
+    <string name="note_input_screen_title">Add your note</string>
 </resources>
