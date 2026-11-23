@@ -20,6 +20,8 @@ class NoteInputViewModel(
     private val _text = MutableStateFlow("")
     val text: StateFlow<String> = _text.asStateFlow()
 
+    private var isCoroutineLaunched = false
+
     private var noteId: Long = 0L
     private var createdOn: Long = 0L
 
@@ -45,8 +47,9 @@ class NoteInputViewModel(
 
     fun saveNote(onSuccess: () -> Unit = {}) {
         val trimmedTitle = _title.value.trim()
-        if (trimmedTitle.isBlank()) return
+        if (trimmedTitle.isBlank() || isCoroutineLaunched) return
 
+        isCoroutineLaunched = true
         viewModelScope.launch {
             val now = System.currentTimeMillis()
             notesRepository.upsertNote(
