@@ -21,6 +21,12 @@ fun SetupNavGraph(
     navController: NavHostController,
     startDestination: String,
 ) {
+    val navigateBack: () -> Unit = {
+        if (navController.previousBackStackEntry != null) {
+            navController.popBackStack()
+        }
+    }
+
     NavHost(
         navController = navController,
         startDestination = startDestination,
@@ -62,23 +68,17 @@ fun SetupNavGraph(
             NoteInputScreen(
                 noteId = noteId,
                 viewModel = noteInputViewModel,
-                onBackClick = {
-                    navController.popBackStack()
-                },
+                onBackClick = navigateBack,
             )
         }
         composable (Screens.QrCodeScannerScreen.route) {
             QrCodeScannerScreen(
-                onBackClick = {
-                    navController.popBackStack()
-                }
+                onBackClick = navigateBack
             )
         }
         composable(Screens.ExportScreen.route) {
             ExportScreen(
-                onBackClick = {
-                    navController.popBackStack()
-                },
+                onBackClick = navigateBack,
             )
         }
         composable(
@@ -91,9 +91,7 @@ fun SetupNavGraph(
             CreateQrCodeGeneratorScreen(
                 noteId = noteId,
                 viewModel = koinViewModel<QrCodeViewModel>(),
-                onBackClick = {
-                    navController.popBackStack()
-                },
+                onBackClick = navigateBack,
             )
         }
     }
