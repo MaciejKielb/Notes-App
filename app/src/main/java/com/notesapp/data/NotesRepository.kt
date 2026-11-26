@@ -13,6 +13,8 @@ class NotesRepository(
 
     override fun getAllNotes() = notesDao.getAllNotes()
 
+    override fun getNoteById(noteId: Long) = notesDao.getNoteById(noteId)
+
     override fun getNotesOrderedByDateDesc() = notesDao.getNotesOrderedByDateDesc()
 
     override fun getNotesOrderedByDateAsc() = notesDao.getNotesOrderedByDateAsc()
